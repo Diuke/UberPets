@@ -1,0 +1,7 @@
+Juan,5,Mazda 3
+Pepe,2,Chevrolet Camaro
+Ronald,1,Ferrari F50
+Lina,5,Renault Twingo
+Romulo,10,Toyota Prado
+Remo,7,Ford Escape
+Jose,5,Land Cruiser
