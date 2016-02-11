@@ -5,3 +5,4 @@ Lina,5,Renault Twingo
 Romulo,10,Toyota Prado
 Remo,7,Ford Escape
 Jose,5,Land Cruiser
+Camilo,9,Kia Sportage

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static javax.swing.JOptionPane.showMessageDialog;
+import org.jcp.xml.dsig.internal.dom.Utils;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -46,6 +48,7 @@ public class Form extends javax.swing.JFrame {
         dataUber = new javax.swing.JButton();
         pagar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        trigger = new javax.swing.JRadioButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         newCliente = new javax.swing.JMenuItem();
@@ -107,6 +110,13 @@ public class Form extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Conductores Disponibles");
 
+        trigger.setText("jRadioButton1");
+        trigger.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                triggerItemStateChanged(evt);
+            }
+        });
+
         jMenu1.setText("Nuevo");
 
         newCliente.setText("Cliente");
@@ -140,13 +150,16 @@ public class Form extends javax.swing.JFrame {
                     .addComponent(dir2)
                     .addComponent(dir1, javax.swing.GroupLayout.DEFAULT_SIZE, 695, Short.MAX_VALUE)
                     .addComponent(solUber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dataUber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pagar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(dataUber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pagar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(trigger, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
@@ -176,7 +189,9 @@ public class Form extends javax.swing.JFrame {
                         .addComponent(solUber, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(54, 54, 54)
                         .addComponent(dataUber, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 237, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
+                        .addComponent(trigger, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(pagar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -210,8 +225,9 @@ public class Form extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         UberPets platform = new UberPets();
-        //SE NECESITA ARREGLAR LOS PATH ABSOLUTOS A RELATIVOS
-        File archivo = new File("C:\\Users\\juan-\\Desktop\\TempGit\\UberPetsJPD\\src\\resources\\clientes.txt");
+        //ARREGLADO :D
+        File archivo = new File(Utils.class.getResource("/resources/clientes.txt").getFile());
+        System.out.println(Utils.class.getResource("/resources/clientes.txt"));
         FileReader fr;
         try {
             fr = new FileReader(archivo);
@@ -223,14 +239,15 @@ public class Form extends javax.swing.JFrame {
                 platform.NuevoCliente(Integer.parseInt(newline[0]), newline[1], newline[2]);
                 linea = br.readLine();
             }
+            fr.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         
-        archivo = new File ("C:\\Users\\juan-\\Desktop\\TempGit\\UberPetsJPD\\src\\resources\\conductores.txt");
+        archivo = new File (Utils.class.getResource("/resources/conductores.txt").getFile());
         try {
             fr = new FileReader(archivo);
-            BufferedReader br = new BufferedReader(fr);
+            BufferedReader br = new BufferedReader(fr); 
             String linea;
             linea = br.readLine();
             while(linea != null){
@@ -238,6 +255,7 @@ public class Form extends javax.swing.JFrame {
                 platform.NuevoUber(newline[0], Integer.parseInt(newline[1]), newline[2]);
                 linea = br.readLine();
             }
+            fr.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -246,6 +264,7 @@ public class Form extends javax.swing.JFrame {
         fetchUber(platform.conductores);
         setClientes();
         setConductores();
+        
     }//GEN-LAST:event_formWindowOpened
 
     private void solUberMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_solUberMouseClicked
@@ -274,12 +293,54 @@ public class Form extends javax.swing.JFrame {
         // TODO add your handling code here:
         uberPets.Ventana1 abrir = new uberPets.Ventana1();
         abrir.setVisible(true); 
-        System.out.println("works?");
+        abrir.datos = data;
+        abrir.p = trigger;
+        
     }//GEN-LAST:event_newClienteActionPerformed
 
     private void newUberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newUberActionPerformed
         // TODO add your handling code here:
+        uberPets.Ventana2 abrir2 = new uberPets.Ventana2();
+        abrir2.setVisible(true); 
+        abrir2.datos = data;
+        abrir2.p = trigger;
     }//GEN-LAST:event_newUberActionPerformed
+
+    private void triggerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_triggerItemStateChanged
+        // TODO add your handling code here:
+        if(data[0] != null){
+            boolean valid = true;
+            try{
+                Integer.parseInt(data[2]);
+            }
+            catch(Exception e){ 
+                valid = false;
+            }
+            if(valid == true){
+                Client p = new Client(Integer.parseInt(data[2]), data[0], data[1]);
+                clientesAux.add(p);
+                clientes.addItem(p.getNombre());
+                String line = data[2]+","+data[0]+","+data[1]+"\n";
+                this.writeNew(new File(Utils.class.getResource("/resources/clientes.txt").getFile()), line);
+                data[0] = null;
+                data[1] = null;
+                data[2] = null;
+            }
+            else{
+                int newIndex = uberAux.size()+1;
+                uberAux.add(new Uber(data[0], Integer.parseInt(data[1]), data[2], newIndex)); 
+                setConductores();
+                String line = data[0]+","+data[1]+","+data[2]+"\n";
+                this.writeNew(new File(Utils.class.getResource("/resources/conductores.txt").getFile()), line);
+                data[0] = null;
+                data[1] = null;
+                data[2] = null;
+            }
+        }
+        else{
+            showMessageDialog(null, "Nada que actualizar");
+        }
+    }//GEN-LAST:event_triggerItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -330,6 +391,20 @@ public class Form extends javax.swing.JFrame {
             }
         }
     }
+    
+    public void writeNew(File file, String line){
+        try {
+            Writer writer;
+            writer = new BufferedWriter(new FileWriter(file, true)); 
+            writer.append(line);
+            writer.close();
+        } catch (Exception e) {
+            
+        }
+        
+    }
+    
+    public String[] data = new String[3];
     
     public boolean solicitarUber(Client c, String direcciones, int tamanoPerro){
         if(c.moving == false){
@@ -407,5 +482,6 @@ public class Form extends javax.swing.JFrame {
     private javax.swing.JMenuItem newUber;
     private javax.swing.JButton pagar;
     private javax.swing.JButton solUber;
+    public javax.swing.JRadioButton trigger;
     // End of variables declaration//GEN-END:variables
 }
